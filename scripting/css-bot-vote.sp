@@ -4,7 +4,7 @@
 #define BASE_STR_LEN 128
 
 public Plugin myinfo = {
-    name = "CS:S Bote Vote",
+    name = "CS:S Bot Vote",
     author = "Eric Zhang",
     description = "Vote to allow bots to fill the server",
     version = "1.0",
