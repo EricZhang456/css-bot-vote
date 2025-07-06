@@ -51,9 +51,11 @@ public void OnPluginStart() {
 }
 
 public void OnMapStart() {
-    delete g_hCooldownTimer;
-    g_bVoteInCooldown = false;
-    g_cvBotQuota.IntValue = 0;
+    ClearQuota();
+}
+
+public void OnServerEnterHibernation() {
+    ClearQuota();
 }
 
 public Action Cmd_OnBotVote(int client, int args) {
@@ -138,4 +140,10 @@ public void Post_VoteCooldownTimer(Handle timer) {
     if (g_bVoteInCooldown) {
         g_bVoteInCooldown = false;
     }
+}
+
+void ClearQuota() {
+    delete g_hCooldownTimer;
+    g_bVoteInCooldown = false;
+    g_cvBotQuota.IntValue = 0;
 }
