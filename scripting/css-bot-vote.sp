@@ -11,8 +11,6 @@ public Plugin myinfo = {
     url = "https://ericaftereric.top"
 };
 
-bool g_bVoteInCooldown;
-
 Handle g_hCooldownTimer;
 
 ConVar g_cvBotQuota;
@@ -50,7 +48,7 @@ public void OnPluginStart() {
     AutoExecConfig(true);
 }
 
-public void OnMapStart() {
+public void OnMapEnd() {
     ClearQuota();
 }
 
@@ -70,7 +68,7 @@ public Action Cmd_OnBotVote(int client, int args) {
         ReplyToCommand(client, "Server has disabled voting for spectators.");
         return Plugin_Handled;
     }
-    if (g_bVoteInCooldown || CheckVoteDelay() != 0) {
+    if (g_hCooldownTimer != null || CheckVoteDelay() != 0) {
         ReplyToCommand(client, "Vote is on cooldown.");
         return Plugin_Handled;
     }
@@ -96,7 +94,6 @@ public Action Cmd_OnBotVote(int client, int args) {
     voteMenu.AddItem("yes", "Yes");
     voteMenu.AddItem("no", "No");
     voteMenu.DisplayVoteToAll(g_cvCBVVoteMenuTime.IntValue);
-    g_bVoteInCooldown = true;
     g_hCooldownTimer = CreateTimer(g_cvCBVVoteMenuCooldown.FloatValue, Post_VoteCooldownTimer);
     return Plugin_Handled;
 }
@@ -137,13 +134,12 @@ public void MenuHandler_BotVote(Menu menu, MenuAction action, int param1, int pa
 }
 
 public void Post_VoteCooldownTimer(Handle timer) {
-    if (g_bVoteInCooldown) {
-        g_bVoteInCooldown = false;
-    }
+    g_hCooldownTimer = null;
 }
 
 void ClearQuota() {
-    delete g_hCooldownTimer;
-    g_bVoteInCooldown = false;
+    if (g_hCooldownTimer != null) {
+        delete g_hCooldownTimer;
+    }
     g_cvBotQuota.IntValue = 0;
 }
