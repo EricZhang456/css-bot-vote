@@ -127,7 +127,7 @@ public void MenuHandler_BotVote(Menu menu, MenuAction action, int param1, int pa
                     g_cvBotQuota.IntValue = 0;
                 }
             } else {
-                PrintToChatAll("Vote failed.")
+                PrintToChatAll("Vote failed.");
             }
         }
     }
